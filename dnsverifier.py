@@ -21,6 +21,11 @@ if os.path.exists("dns.txt"):
                 dns_list.append(line)
         dns_file.close()
 
+    # Verify if DNS list has DNS IP on it
+    if len(dns_list) < 1:
+        print("DNS List is empty, please verify 'dns.txt' file.")
+        quit()
+
     dns_ping_ms = [] # List to storage DNS info
 
     # Ping each DNS 10 times and get its mean response
@@ -48,3 +53,22 @@ if os.path.exists("dns.txt"):
     # Printing the 5 fastest DNS
     for cont in range(5):
         print("{}º - {} ({:.0f} ms)".format(cont + 1, dns_ping_ms[cont].ip, dns_ping_ms[cont].mean_resp))
+
+# Treatment for "dns.txt" not found
+else:
+    print("'dns.txt' couldn't be found. Creating...")
+
+    tries = 0
+    while not os.path.exists("dns.txt"):
+
+        # Creating tries
+        if tries == 5:
+            print("A problem occurred during 'dns.txt' creation. Please restart tool.")
+            quit()
+
+        with open("dns.txt", "x") as dns_file:
+            dns_file.close()
+        
+        tries = tries + 1
+
+    print("'dns.txt' created! Please, fill it and restart tool.")
