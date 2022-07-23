@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from statistics import mean
 from ping3 import ping
 
@@ -10,6 +11,9 @@ class DnsPing:
 
 # Verify if dns.txt exists
 if os.path.exists("dns.txt"):
+
+    exec_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S") # Storage execution date
+    exec_time_start = datetime.now().replace(microsecond=0) # Storage start time
 
     # Get all DNS
     with open("dns.txt", "r") as dns_file:
@@ -27,6 +31,7 @@ if os.path.exists("dns.txt"):
         quit()
 
     dns_ping_ms = [] # List to storage DNS info
+    dns_ping_fail = [] # List to storage failed Pings
 
     # Ping each DNS 10 times and get its mean response
     for dns in dns_list:        
@@ -38,6 +43,7 @@ if os.path.exists("dns.txt"):
                 pings.append(ping_ * 1000)
             else:
                 print("IP: {} || Fail".format(dns.strip("\n")))
+                dns_ping_fail.append(dns.strip("\n"))
                 break
         
         if len(pings) == 10:
@@ -48,12 +54,39 @@ if os.path.exists("dns.txt"):
             for cont in range(len(pings)):
                 print("     Ping{}: {:.0f} ms".format(cont+1, pings[cont]))
     
-    dns_ping_ms.sort(key=lambda x: x.mean_resp) # Sorting DNS mean response list by lowest to highest
+    exec_time_finish = datetime.now().replace(microsecond=0) # Storage finish time
+
+    # Printing execution information
+    print("\n====== EXECUTION INFORMATION ======\n")
+    print("Date: {}".format(exec_date))
+    print("Duration: {}".format((exec_time_finish - exec_time_start)))
 
     # Printing the 5 fastest DNS
+    print("\n====== FASTEST PING RESULTS ======\n")
+    
+    dns_ping_ms.sort(key=lambda x: x.mean_resp) # Sorting DNS mean response list by lowest to highest
     for cont in range(5):
         print("{}º - {} ({:.0f} ms)".format(cont + 1, dns_ping_ms[cont].ip, dns_ping_ms[cont].mean_resp))
+    
+    # Printing DNS with Fail Pings
+    if len(dns_ping_fail) > 0:
+        print("\n====== FAIL PINGS ======\n")
 
+        print(dns_ping_fail[0], end="")
+
+        for dns in dns_ping_fail:
+            if dns != dns_ping_fail[0]:
+                print(", " + dns, end="")
+
+    # Printing remaining Ping results    
+    print("\n\n====== OTHER PING RESULTS ======\n")
+
+    print("{} ({:.0f} ms)".format(dns_ping_ms[5].ip, dns_ping_ms[5].mean_resp), end="")
+
+    for dns in dns_ping_ms:
+        if dns != dns_ping_ms[0] and dns != dns_ping_ms[1] and dns != dns_ping_ms[2] and dns != dns_ping_ms[3] and dns != dns_ping_ms[4] and dns != dns_ping_ms[5]:
+            print(", {} ({:.0f} ms)".format(dns.ip, dns.mean_resp), end="")
+    
 # Treatment for "dns.txt" not found
 else:
     print("'dns.txt' couldn't be found. Creating...")
@@ -61,14 +94,13 @@ else:
     tries = 0
     while not os.path.exists("dns.txt"):
 
-        # Creating tries
-        if tries == 5:
-            print("A problem occurred during 'dns.txt' creation. Please restart tool.")
-            quit()
-
         with open("dns.txt", "x") as dns_file:
             dns_file.close()
-        
+
+        # Verify creation tries
+        if tries == 5:
+            print("A problem occurred during 'dns.txt' creation. Please restart tool.")
+            quit()        
         tries = tries + 1
 
     print("'dns.txt' created! Please, fill it and restart tool.")
