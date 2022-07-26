@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from statistics import mean
 from ping3 import ping
+from tqdm import tqdm
 
 # Class used to manage each DNS info
 class DnsPing:
@@ -34,7 +35,7 @@ if os.path.exists("dns.txt"):
     dns_ping_fail = [] # List to storage failed Pings
 
     # Ping each DNS 10 times and get its mean response
-    for dns in dns_list:        
+    for dns in tqdm(dns_list):
         pings = []
         
         for cont in range (10):
@@ -42,17 +43,12 @@ if os.path.exists("dns.txt"):
             if ping_ != None and ping_ != False: # Treatment for Timeout   
                 pings.append(ping_ * 1000)
             else:
-                print("IP: {} || Fail".format(dns.strip("\n")))
                 dns_ping_fail.append(dns.strip("\n"))
                 break
         
         if len(pings) == 10:
             dns_ = DnsPing(dns.strip("\n"), mean(pings)) # Saving info in a object
             dns_ping_ms.append(dns_) # Saving object for future sort
-
-            print("IP: {} || {:.0f} ms".format(dns.strip("\n"), mean(pings)))
-            for cont in range(len(pings)):
-                print("     Ping{}: {:.0f} ms".format(cont+1, pings[cont]))
     
     exec_time_finish = datetime.now().replace(microsecond=0) # Storage finish time
 
