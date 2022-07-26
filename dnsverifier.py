@@ -65,8 +65,11 @@ if os.path.exists("dns.txt"):
     print("\n====== FASTEST PING RESULTS ======\n")
     
     dns_ping_ms.sort(key=lambda x: x.mean_resp) # Sorting DNS mean response list by lowest to highest
-    for cont in range(5):
+    for cont in range(len(dns_ping_ms)):
         print("{}º - {} ({:.0f} ms)".format(cont + 1, dns_ping_ms[cont].ip, dns_ping_ms[cont].mean_resp))
+        
+        if cont == 4:
+            break
     
     # Printing DNS with Fail Pings
     if len(dns_ping_fail) > 0:
@@ -77,15 +80,16 @@ if os.path.exists("dns.txt"):
         for dns in dns_ping_fail:
             if dns != dns_ping_fail[0]:
                 print(", " + dns, end="")
+        print("") # Breakline
 
-    # Printing remaining Ping results    
-    print("\n\n====== OTHER PING RESULTS ======\n")
+    # Printing remaining Ping results
+    if len(dns_ping_ms) > 5: 
+        print("\n====== OTHER PING RESULTS ======\n")    
+        print("{} ({:.0f} ms)".format(dns_ping_ms[5].ip, dns_ping_ms[5].mean_resp), end="")
 
-    print("{} ({:.0f} ms)".format(dns_ping_ms[5].ip, dns_ping_ms[5].mean_resp), end="")
-
-    for dns in dns_ping_ms:
-        if dns != dns_ping_ms[0] and dns != dns_ping_ms[1] and dns != dns_ping_ms[2] and dns != dns_ping_ms[3] and dns != dns_ping_ms[4] and dns != dns_ping_ms[5]:
-            print(", {} ({:.0f} ms)".format(dns.ip, dns.mean_resp), end="")
+        for dns in dns_ping_ms:
+            if dns != dns_ping_ms[0] and dns != dns_ping_ms[1] and dns != dns_ping_ms[2] and dns != dns_ping_ms[3] and dns != dns_ping_ms[4] and dns != dns_ping_ms[5]:
+                print(", {} ({:.0f} ms)".format(dns.ip, dns.mean_resp), end="")
     
 # Treatment for "dns.txt" not found
 else:
