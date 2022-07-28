@@ -3,12 +3,15 @@ from datetime import datetime
 from statistics import mean
 from ping3 import ping
 from tqdm import tqdm
+from colorama import Fore
 
 # Class used to manage each DNS info
 class DnsPing:
-    def __init__(self, ip, mean_resp):
+    def __init__(self, ip, min, max, avg):
         self.ip = ip
-        self.mean_resp = mean_resp
+        self.min = min
+        self.max = max
+        self.avg = avg
 
 # Verify if dns.txt exists
 if os.path.exists("dns.txt"):
@@ -47,7 +50,7 @@ if os.path.exists("dns.txt"):
                 break
         
         if len(pings) == 10:
-            dns_ = DnsPing(dns.strip("\n"), mean(pings)) # Saving info in a object
+            dns_ = DnsPing(dns.strip("\n"), min(pings), max(pings), mean(pings)) # Saving info in a object
             dns_ping_ms.append(dns_) # Saving object for future sort
     
     exec_time_finish = datetime.now().replace(microsecond=0) # Storage finish time
@@ -60,9 +63,9 @@ if os.path.exists("dns.txt"):
     # Printing the 5 fastest DNS
     print("\n====== FASTEST PING RESULTS ======\n")
     
-    dns_ping_ms.sort(key=lambda x: x.mean_resp) # Sorting DNS mean response list by lowest to highest
+    dns_ping_ms.sort(key=lambda x: x.avg) # Sorting DNS mean response list by lowest to highest
     for cont in range(len(dns_ping_ms)):
-        print("{}º - {} ({:.0f} ms)".format(cont + 1, dns_ping_ms[cont].ip, dns_ping_ms[cont].mean_resp))
+        print("{}º - {} ({}Min: {:.0f} ms{}, {}Max: {:.0f} ms{}, {}Avg: {:.0f} ms{})".format(cont + 1, dns_ping_ms[cont].ip, Fore.GREEN, dns_ping_ms[cont].min, Fore.RESET, Fore.RED, dns_ping_ms[cont].max, Fore.RESET, Fore.YELLOW, dns_ping_ms[cont].avg, Fore.RESET))
         
         if cont == 4:
             break
@@ -81,11 +84,11 @@ if os.path.exists("dns.txt"):
     # Printing remaining Ping results
     if len(dns_ping_ms) > 5: 
         print("\n====== OTHER PING RESULTS ======\n")    
-        print("{} ({:.0f} ms)".format(dns_ping_ms[5].ip, dns_ping_ms[5].mean_resp), end="")
+        print("{} ({}Avg: {:.0f} ms{})".format(dns_ping_ms[5].ip, Fore.YELLOW, dns_ping_ms[5].avg, Fore.RESET), end="")
 
         for dns in dns_ping_ms:
             if dns != dns_ping_ms[0] and dns != dns_ping_ms[1] and dns != dns_ping_ms[2] and dns != dns_ping_ms[3] and dns != dns_ping_ms[4] and dns != dns_ping_ms[5]:
-                print(", {} ({:.0f} ms)".format(dns.ip, dns.mean_resp), end="")
+                print(", {} ({}Avg: {:.0f} ms{})".format(dns.ip, Fore.YELLOW, dns.avg, Fore.RESET), end="")
     
 # Treatment for "dns.txt" not found
 else:
