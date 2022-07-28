@@ -1,6 +1,6 @@
 # DNS Shimir
 A python tool to get the best DNS for your machine! At the moment, we are developing it just to improve our programming/git skills but maybe can be a good solution for you.
-##Installation
+## Installation
 We recommend to install Python 3.10 before used because it is developed with it.
 
 Install the dependencies with this command on repository folder:
@@ -9,7 +9,7 @@ Install the dependencies with this command on repository folder:
 
 After this you can start to use it.
 
-##Usage
+## Usage
 Basically, the tool will ping 10 times in each DNS given to it, and you have two ways to give these DNS:
 + **Local Verification**: DNS Shimir will ask for your location and after that will get available DNS on it in https://public-dns.info/ website.
 + **Custom Verification**: DNS Shimir will create a text file for you to fill with the DNS you want to check.
