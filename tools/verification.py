@@ -1,4 +1,4 @@
-import os
+from tools.util import *
 
 '''
 This file was created to storage functions related to 
@@ -46,5 +46,33 @@ def customVerification():
         print("'dns.txt' created! Please, fill it and restart tool.")
 
 def localVerification():
-    return "localVerification"
+    clearScreen()
 
+    # Class to storage country information
+    class Country:
+        def __init__(self, name, path):
+            self.name = name
+            self.path = path
+        def __repr__(self):
+            return "(" + self.name + ", " + self.path + ")"
+
+    # Do a request to public-dns to get html source code
+    public_dns_req = BeautifulSoup(requests.get("https://public-dns.info/").text, "html.parser")
+    country_list = []
+
+    # Storage available countries in a list
+    for link in public_dns_req.find_all("a"):
+        if str(link).find("/nameserver/") != -1:
+            country_list.append(Country(str(link.contents).strip("'[]"), str(link.attrs)[10:].strip("'}")))
+
+    # Show menu to select country
+    printTitle("LOCAL VERIFICATION")
+    print("Where are you from?\n")    
+    for country in country_list:
+        print(str(country_list.index(country)) + " - " + country.name)
+    country_op = int(input("\nEnter the correspoding country number: "))
+
+    while country_op < 0 or country_op > (len(country_list) - 1):
+        country_op = int(input("Invalid Option. Enter the correspoding country number: "))
+
+    print("\nSelected country: {}".format(country_list[country_op].name))

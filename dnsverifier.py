@@ -7,26 +7,26 @@ class DnsPing:
         self.ip = ip
         self.mean_resp = mean_resp
 
-op = 1
-while op != 0:
-    printTitle("DNS SHIMIR")
-    print("1 - Local Verification (Verification is done based on your location)")
-    print("2 - Custom Verification (You choose which DNS IPs will be verified)")
-    print("\n0 - Exit")
-    op = int(input("\nEnter verification you want: "))
+# Show main menu
+printTitle("DNS SHIMIR")
+print("1 - Local Verification (Verification is done based on your location)")
+print("2 - Custom Verification (You choose which DNS IPs will be verified)")
+print("\n0 - Exit")
+op = int(input("\nEnter verification you want: "))
 
-    if op == 0:
-        exit()
-    elif op == 1:
-        dns_list = localVerification()
-        break
-    elif op == 2:
-        dns_list = customVerification()
-        break
-    else:
-        print("Invalid option.")
-    clearScreen()
+while op < 0 or op > 2:
+    op = int(input("Invalid option. Enter verification you want: "))
 
+if op == 0:
+    exit()
+elif op == 1:
+    dns_list = localVerification()
+elif op == 2:
+    dns_list = customVerification()
+else:
+    print("Invalid option.")
+
+# Validates DNS List to start verification
 if type(dns_list) == list:
     clearScreen()
     exec_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S") # Storage execution date

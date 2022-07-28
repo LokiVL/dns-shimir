@@ -1,4 +1,6 @@
 import os
+import requests
+from bs4 import BeautifulSoup
 from datetime import datetime
 from typing import List
 from statistics import mean
