@@ -1,7 +1,7 @@
 # DNS Shimir
 A python tool to get the best DNS for your machine! At the moment, we are developing it just to improve our programming/git skills but maybe can be a good solution for you.
 ## Installation
-We recommend to install Python 3.10 before used because it is developed with it.
+We recommend to install Python 3.10 before use it because it is developed with it.
 
 Install the dependencies with this command on repository folder:
 
