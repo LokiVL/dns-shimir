@@ -11,10 +11,10 @@ After this you can start to use it.
 
 ## Usage
 Basically, the tool will ping 10 times in each DNS given to it, and you have two ways to give these DNS:
-+ **Local Verification**: DNS Shimir will ask for your location and after that will get available DNS on it in https://public-dns.info/ website.
-+ **Custom Verification**: DNS Shimir will create a text file for you to fill with the DNS you want to check.
- + You just have to fill each line of the text file with an DNS.
- + You can make comments on the text file just putting a `#` in the beginning of line you want to comment.
+- **Local Verification**: DNS Shimir will ask for your location and after that will get available DNS on it in https://public-dns.info/ website.
+- **Custom Verification**: DNS Shimir will create a text file for you to fill with the DNS you want to check.
+    - You just have to fill each line of the text file with an DNS.
+    - You can make comments on the text file just putting a `#` in the beginning of line you want to comment.
  
 Example of text file for Custom Verification:
 ```
