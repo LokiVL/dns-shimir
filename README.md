@@ -5,7 +5,7 @@ We recommend to install Python 3.10 before used because it is developed with it.
 
 Install the dependencies with this command on repository folder:
 
-`pip install -r requirements`
+`pip install -r requirements.txt`
 
 After this you can start to use it.
 
