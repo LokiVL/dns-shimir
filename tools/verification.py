@@ -25,6 +25,10 @@ def customVerification():
         if len(dns_list) < 1:
             print("DNS List is empty, please verify 'dns.txt' file.")
             quit()
+        
+        printTitle("PING EXECUTION")
+        print(f"{len(dns_list)} DNS servers found. Start pinging...")
+
         return dns_list
 
     # Treatment for "dns.txt" not found
@@ -46,7 +50,6 @@ def customVerification():
         print("'dns.txt' created! Please, fill it and restart tool.")
 
 def localVerification():
-    clearScreen()
 
     # Class to storage country information
     class Country:
@@ -75,4 +78,9 @@ def localVerification():
     while country_op < 0 or country_op > (len(country_list) - 1):
         country_op = int(input("Invalid Option. Enter the correspoding country number: "))
 
-    print("\nSelected country: {}".format(country_list[country_op].name))
+    dns_list = requests.get("https://public-dns.info" + country_list[country_op].path.replace("html", "txt")).text.splitlines()
+    
+    printTitle("PING EXECUTION")
+    print(f"{len(dns_list)} DNS servers found on {country_list[country_op].name}. Start pinging...")
+
+    return dns_list

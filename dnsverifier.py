@@ -28,7 +28,6 @@ else:
 
 # Validates DNS List to start verification
 if type(dns_list) == list:
-    clearScreen()
     exec_date = datetime.now().strftime("%d/%m/%Y %H:%M:%S") # Storage execution date
     exec_time_start = datetime.now().replace(microsecond=0) # Storage start time
 
@@ -53,7 +52,6 @@ if type(dns_list) == list:
 
     exec_time_finish = datetime.now().replace(microsecond=0) # Storage finish time
 
-    clearScreen()
     # Printing execution information
     printTitle("EXECUTION INFORMATION")
     print("Date: {}".format(exec_date))
